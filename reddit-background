@@ -495,7 +495,11 @@ def _download_to_directory(url, dirname, filename):
     """Download a file to a particular directory"""
     _safe_makedirs(dirname)
 
-    path = os.path.join(dirname, filename)
+    updatedFilename = re.sub('[,\" ]', '_', filename)
+
+    log("Renaming {0} to {1}".format(filename, updatedFilename))
+
+    path = os.path.join(dirname, updatedFilename)
 
     log(u"Downloading '{0}' to '{1}'".format(url, path))
     response = _urlopen(url)
@@ -587,6 +591,7 @@ class Subreddit(object):
                          sort=self.sort,
                          timeframe=self.timeframe,
                          limit=self.limit)
+        log("URL to fetch data  is " + url)
 
         try:
             response = _urlopen(url)
